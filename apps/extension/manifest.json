@@ -1,0 +1,22 @@
+{
+  "name": "gitlab-confetti",
+  "description": "在 GitLab 中，当 Merge Request 被 Approved、被 Merged、被点赞时，放烟花庆祝一下。",
+  "manifest_version": 3,
+  "version": "1.0",
+
+  "permissions": ["tabs"],
+  "content_scripts": [
+    {
+      "matches": ["https://*/*"],
+      "include_globs": ["*://*merge_requests/*"],
+      "js": ["/contentScript.js"]
+    }
+  ],
+  "background": {},
+  "web_accessible_resources": [
+    {
+      "resources": ["/libs/confetti.min.js"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

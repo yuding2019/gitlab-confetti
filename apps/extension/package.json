@@ -1,0 +1,16 @@
+{
+  "name": "gitlab-confetti",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {},
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/canvas-confetti": "^1.6.4",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.6",
+    "typescript": "^5",
+    "@types/chrome": "^0.0.270"
+  },
+  "dependencies": {}
+}
