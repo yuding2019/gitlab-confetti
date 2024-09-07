@@ -1,125 +1,212 @@
+const ConfettiFn = {
+  fireworks: () => {
+    const duration = 5 * 1000;
+    const animationEnd = Date.now() + duration;
+    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+    function randomInRange(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    const interval = setInterval(function () {
+      const timeLeft = animationEnd - Date.now();
+
+      if (timeLeft <= 0) {
+        return clearInterval(interval);
+      }
+
+      const particleCount = 50 * (timeLeft / duration);
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+      });
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+      });
+    }, 250);
+  },
+};
+
 const FireConfetti = (function () {
   const CACHE_KEY = 'gitlab-confetti';
 
-  let data = {};
+  const CallbackMap = {};
 
-  const getCache = () => {
+  let FireCache = {};
+
+  // 初始化confetti缓存数据
+  const initFireCache = () => {
     const json = localStorage.getItem(CACHE_KEY);
     try {
-      data = JSON.parse(json) || {};
+      FireCache = JSON.parse(json) || {};
     } catch (e) {
-      data = {};
+      FireCache = {};
     }
   };
 
+  // 初始化confetti
+  const initConfetti = async () => {
+    const src = chrome.runtime.getURL('/libs/confetti.min.js');
+    await import(src);
+  };
+
+  // 是否已经放烟花
   const isFired = (projectId, mergeRequestId) => {
     const key = `${projectId}:${mergeRequestId}`;
-    return !!data[key];
+    return !!FireCache[key];
   };
 
-  const fire = (projectId, mergeRequestId) => {
-    confetti();
+  // 放烟花
+  const fire = (params) => {
+    const { projectId, mergeRequestId, force } = params;
+
+    if (isFired(projectId, mergeRequestId) && !force) {
+      return;
+    }
+
+    ConfettiFn.fireworks();
     const key = `${projectId}:${mergeRequestId}`;
-    data[key] = {
+    FireCache[key] = {
       timestamp: Date.now(),
     };
-    localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+    localStorage.setItem(CACHE_KEY, JSON.stringify(FireCache));
   };
 
-  getCache();
+  initFireCache();
+
+  initConfetti().then(() => {
+    CallbackMap['onLoad'] && CallbackMap['onLoad']();
+  });
 
   return {
-    isFired,
     fire,
+    isFired,
+    onLoad: (cb) => {
+      CallbackMap['onLoad'] = cb;
+    },
   };
 })();
 
-class GitLabConfetti {
-  _mounted = false;
+function getButton() {
+  const approveButton = document.querySelector(
+    'button[data-qa-selector="approve_button"]'
+  );
+  const thumbsUpButton = document.querySelector(
+    'button:has(gl-emoji[data-name="thumbsup"])'
+  );
 
-  max = 10;
-  count = 0;
+  return {
+    approveButton,
+    thumbsUpButton,
+  };
+}
 
-  fired = false;
+class MergeRequest {
+  mergeRequestData = {};
 
-  mergeRequest = {};
+  eventMap = new Map();
 
   constructor() {
-    this.init();
+    this.initialize();
+    this.eventMap = new Map();
   }
 
-  async init() {
-    await this._loadConfetti();
-    this._mounted = true;
+  async initialize() {
+    const data = await this.fetchMergeRequestData();
+    this.mergeRequestData = data;
 
-    const res = await fetch(`${window.location.href}/cached_widget.json`, {
+    // 初始化尝试放一次烟花
+    this.tryToFireConfetti();
+
+    this.listenButtonClick();
+  }
+
+  // 获取merge request信息
+  async fetchMergeRequestData() {
+    const {
+      iid: mergeRequestId,
+      target_project_id: projectId,
+      state,
+      draft,
+    } = await fetch(`${window.location.href}/cached_widget.json`, {
       method: 'GET',
     }).then((res) => res.json());
 
-    this.fired = FireConfetti.isFired(res.target_project_id, res.iid);
+    // 获取merge request点赞信息以及approval信息
+    const [emojis, approval] = await Promise.all([
+      fetch(
+        `${window.location.origin}/api/v4/projects/${projectId}/merge_requests/${mergeRequestId}/award_emoji?per_page=100&page=1`,
+        {
+          method: 'GET',
+        }
+      ).then((res) => res.json()),
+      fetch(
+        `${window.location.origin}/api/v4/projects/${projectId}/merge_requests/${mergeRequestId}/approvals`,
+        {
+          method: 'GET',
+        }
+      ).then((res) => res.json()),
+    ]);
 
-    this.mergeRequest = res;
+    const thumbsUpCount = Array.isArray(emojis)
+      ? emojis.filter((emoji) => emoji.name === 'thumbsup').length
+      : 0;
 
-    this.tryFireConfetti();
+    return {
+      projectId,
+      mergeRequestId,
+      state,
+      approved: approval.approved,
+      isDraft: draft,
+      thumbsUpCount,
+    };
   }
 
-  async _loadConfetti() {
-    const src = chrome.runtime.getURL('/libs/confetti.min.js');
-    await import(src);
-  }
+  listenButtonClick() {
+    const { projectId, mergeRequestId } = this.mergeRequestData;
+    const { approveButton, thumbsUpButton } = getButton();
+    approveButton?.addEventListener('click', () => {
+      this.emit('fire', { projectId, mergeRequestId, force: true });
+    });
 
-  poll() {
-    if (this.count >= this.max) {
-      return;
-    }
-
-    this.queryMergeRequestState().then((fired) => {
-      if (fired) {
-        this.fired = true;
-        return;
+    thumbsUpButton?.addEventListener('click', () => {
+      const count = Number(thumbsUpButton.textContent.match(/\d+/g)?.[0] || 0);
+      if (count > this.mergeRequestData.thumbsUpCount) {
+        this.emit('fire', { projectId, mergeRequestId, force: true });
       }
-
-      setTimeout(() => {
-        this.poll();
-      }, 1000 * this.count);
-      this.count++;
     });
   }
 
-  async queryMergeRequestState() {
-    const thumbsUp = window.document.querySelector(
-      `span:has(> gl-emoji[data-name='thumbsup']) + .gl-button-text`
-    );
-    return false;
+  tryToFireConfetti() {
+    const { state, thumbsUpCount, projectId, mergeRequestId, approved } =
+      this.mergeRequestData;
+    if (state === 'merged' || thumbsUpCount > 0 || approved) {
+      this.emit('fire', { projectId, mergeRequestId });
+    }
   }
 
-  listen() {
-    const button = window.document.querySelector(
-      `button:has(gl-emoji[data-name='thumbsup'])`
-    );
+  on(event, callback) {
+    this.eventMap.set(event, callback);
 
-    const handleClick = () => {
-      if (this.fired) {
-        return;
-      }
-
-      this.tryFireConfetti();
-      this.fired = true;
+    return () => {
+      this.eventMap.delete(event);
     };
-
-    button.addEventListener('click', handleClick);
   }
 
-  tryFireConfetti() {
-    if (!this._mounted || this.fired) {
-      return;
-    }
-
-    const { state, merge_status, target_project_id, iid } = this.mergeRequest;
-    if (merge_status === 'can_be_merged' || state === 'merged') {
-      FireConfetti.fire(target_project_id, iid);
-    }
+  emit(event, payload) {
+    const callback = this.eventMap.get(event);
+    callback && callback(payload);
   }
 }
 
-new GitLabConfetti();
+// 加载完后初始化MergeRequest
+FireConfetti.onLoad(() => {
+  const mergeRequest = new MergeRequest();
+
+  mergeRequest.on('fire', (payload) => {
+    FireConfetti.fire(payload);
+  });
+});
