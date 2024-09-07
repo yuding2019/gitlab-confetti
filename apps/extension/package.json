@@ -2,15 +2,23 @@
   "name": "gitlab-confetti",
   "version": "0.1.0",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "build": "rollup -c rollup.config.js --bundleConfigAsCjs",
+    "dev": "rollup -c rollup.config.js --bundleConfigAsCjs --watch"
+  },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@rollup/plugin-node-resolve": "^15.2.3",
     "@types/canvas-confetti": "^1.6.4",
+    "@types/chrome": "^0.0.270",
     "eslint": "^8",
     "eslint-config-next": "14.2.6",
-    "typescript": "^5",
-    "@types/chrome": "^0.0.270"
+    "rollup": "^4.21.2",
+    "rollup-plugin-copy": "^3.5.0",
+    "typescript": "^5"
   },
-  "dependencies": {}
+  "dependencies": {
+    "canvas-confetti": "^1.9.3"
+  }
 }

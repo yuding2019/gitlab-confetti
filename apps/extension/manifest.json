@@ -9,14 +9,8 @@
     {
       "matches": ["https://*/*"],
       "include_globs": ["*://*merge_requests/*"],
-      "js": ["/contentScript.js"]
+      "js": ["/contentScripts.js"]
     }
   ],
-  "background": {},
-  "web_accessible_resources": [
-    {
-      "resources": ["/libs/confetti.min.js"],
-      "matches": ["<all_urls>"]
-    }
-  ]
+  "background": {}
 }
