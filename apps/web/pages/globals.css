@@ -1,6 +1,8 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  --gl-theme: #35935c;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -8,6 +10,16 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
+}
+
+@font-face {
+  font-family: 'geist-sans';
+  src: url('./fonts/GeistVF.woff');
+}
+
+@font-face {
+  font-family: 'geist-mono';
+  src: url('./fonts/GeistMonoVF.woff');
 }
 
 html,
@@ -19,6 +31,10 @@ body {
 body {
   color: var(--foreground);
   background: var(--background);
+}
+
+.font-geist {
+  font-family: 'geist-sans geist-mono';
 }
 
 * {
