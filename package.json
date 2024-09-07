@@ -9,7 +9,7 @@
     "dev:ext": "turbo dev --filter ./apps/extension",
     "dev:web": "turbo dev --filter ./apps/web",
     "build:ext": "turbo build --filter ./apps/extension --force",
-    "build:web": "turbo build --filter ./apps/extension --force"
+    "build:web": "turbo build --filter ./apps/web --force"
   },
   "devDependencies": {
     "prettier": "^3.2.5",
