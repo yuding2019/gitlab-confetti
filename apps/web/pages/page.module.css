@@ -59,27 +59,22 @@
   align-self: flex-end;
   width: fit-content;
   position: relative;
+  display: grid;
+  grid-template-rows: auto 0fr;
+  transition: 0.3s;
+  box-shadow: inset 0 0 0 1px var(--foreground);
+  border-radius: 24px;
+  overflow: hidden;
 }
 
 .dropdown {
-  position: absolute;
-  width: 100%;
-  display: grid;
-  grid-template-rows: 0fr;
   overflow: hidden;
   min-height: 0;
-  transition: 0.3s;
-  top: 24px;
-  border: 1px solid var(--foreground);
-  border-top: none;
-  padding-top: 24px;
-  border-bottom-left-radius: 24px;
-  border-bottom-right-radius: 24px;
   z-index: 0;
 }
 
-.ctas:hover .dropdown {
-  grid-template-rows: 1fr;
+.ctas:hover {
+  grid-template-rows: auto 1fr;
 }
 
 .dropdownContent {
@@ -87,15 +82,14 @@
   flex-direction: column;
   height: fit-content;
   min-height: fit-content;
-  border-bottom-left-radius: 24px;
-  border-bottom-right-radius: 24px;
 }
 
 .dropdownContent a {
   display: block;
 
   &:hover {
-    background-color: #f5f5f5;
+    text-decoration: underline;
+    text-decoration-color: var(--foreground);
   }
 }
 
@@ -106,7 +100,6 @@
   padding: 0 20px;
   border: none;
   font-family: var(--font-geist-sans);
-  border: 1px solid transparent;
   transition:
     background 0.2s,
     color 0.2s,
@@ -126,7 +119,6 @@ a.primary {
   color: var(--background);
   gap: 8px;
   z-index: 999;
-  border: 1px solid var(--foreground);
 }
 
 a.secondary {
@@ -213,14 +205,11 @@ button.secondary {
 
   .ctas a {
     font-size: 14px;
-    height: 40px;
     padding: 0 16px;
   }
 
-  .ctas .dropdown {
-    grid-template-rows: 1fr;
-    top: -24px;
-    position: relative;
+  .ctas {
+    grid-template-rows: auto 1fr;
   }
 
   a.secondary {
