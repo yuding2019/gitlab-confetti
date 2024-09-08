@@ -11,6 +11,7 @@ export default function RootLayout() {
       <Head>
         <link rel="icon" href="/gitlab.png" />
       </Head>
+      <title>GitLab Confetti 🎉</title>
       <body className="font-geist">
         <Main />
         <NextScript />

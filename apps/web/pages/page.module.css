@@ -89,12 +89,12 @@
   min-height: fit-content;
   border-bottom-left-radius: 24px;
   border-bottom-right-radius: 24px;
+}
 
-  a {
-    display: block;
-  }
+.dropdownContent a {
+  display: block;
 
-  a:hover {
+  &:hover {
     background-color: #f5f5f5;
   }
 }
