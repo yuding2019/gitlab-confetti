@@ -4,6 +4,8 @@ import { EdgeIcon } from '../components/Icon/Edge';
 import { CheckLine } from '../components/Icon/CheckLine';
 
 import styles from './page.module.css';
+import { useState } from 'react';
+import { GitMerge } from '../components/Icon/GitMerge';
 
 function fireworks() {
   const duration = 5 * 1000;
@@ -36,26 +38,50 @@ function fireworks() {
 }
 
 export default function Home() {
+  const [approved, setApproved] = useState(false);
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
         <div className={styles.glMerge}>
           <h1>
             feat(<span className={styles.glLink}>GitLab Confetti</span>): 每一个
-            Commit 都应该被庆祝
+            Commit 都值得被庆祝
           </h1>
           <div className={styles.glOverviewWrap}>
-            <span className={styles.glOverview}>Overview</span>
+            <div className={styles.glOverview}>Overview</div>
           </div>
           <div className={styles.glMrBlock}>
             <CheckLine className={styles.icon} />
-            <div className={styles.glMrEmpty} />
+            <span>Detached merge request pipeline</span>
           </div>
           <div className={styles.glMrBlock}>
-            <button className={styles.approve} onClick={() => fireworks()}>
-              Approve
+            <button
+              className={styles.approve}
+              onClick={() => {
+                setApproved(!approved);
+                if (!approved) {
+                  fireworks();
+                }
+              }}
+            >
+              {approved ? 'Approved!' : 'Approve'}
             </button>
-            <span>点击 Approve 放烟花</span>
+            {approved && <span>Approved by you!</span>}
+          </div>
+          <div className={styles.glMrBlock}>
+            <GitMerge className={approved ? styles.merged : styles.merge} />
+            {approved ? (
+              <>
+                <span>You can merge now!</span>
+              </>
+            ) : (
+              <span>Waiting for approval</span>
+            )}
+          </div>
+          <div className={styles.glMrBlock}>
+            <CheckLine className={styles.icon} />
+            <span>Pipeline passed</span>
           </div>
         </div>
         <button className={styles.thumb} onClick={() => fireworks()}>
@@ -65,17 +91,23 @@ export default function Home() {
         <div className={styles.ctas}>
           <a
             className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+            href="https://microsoftedge.microsoft.com/addons/Microsoft-Edge-Extensions-Home"
             target="_blank"
             rel="noopener noreferrer"
           >
             <EdgeIcon className={styles.edgeIcon} />
             前往 Edge 扩展商店
           </a>
-
-          <a href="./gitlab-confetti.crx" download="gitlab-confetti.crx">
-            下载 CRX
-          </a>
+          <div className={styles.dropdown}>
+            <div className={styles.dropdownContent}>
+              <a href="./gitlab-confetti.crx" download="gitlab-confetti.crx">
+                下载 CRX
+              </a>
+              <a href="./gitlab-confetti.zip" download="gitlab-confetti.zip">
+                下载 ZIP
+              </a>
+            </div>
+          </div>
         </div>
       </main>
       <footer className={styles.footer}>

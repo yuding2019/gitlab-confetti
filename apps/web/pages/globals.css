@@ -5,12 +5,12 @@
   --gl-theme: #35935c;
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 @font-face {
   font-family: 'geist-sans';
