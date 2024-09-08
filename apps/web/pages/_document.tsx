@@ -9,7 +9,7 @@ export default function RootLayout() {
   return (
     <Html lang="en">
       <Head>
-        <link rel="icon" href="/gitlab.png" />
+        <link rel="icon" href="./gitlab.png" />
       </Head>
       <title>GitLab Confetti 🎉</title>
       <body className="font-geist">
