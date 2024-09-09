@@ -100,9 +100,9 @@ export default function Home() {
           </a>
           <div className={styles.dropdown}>
             <div className={styles.dropdownContent}>
-              <a href="./gitlab-confetti.crx" download="gitlab-confetti.crx">
+              {/* <a href="./gitlab-confetti.crx" download>
                 下载 CRX
-              </a>
+              </a> */}
               <a href="./gitlab-confetti.zip" download="gitlab-confetti.zip">
                 下载 ZIP
               </a>
