@@ -10,6 +10,7 @@ export default function RootLayout() {
     <Html lang="en">
       <Head>
         <link rel="icon" href="./gitlab.png" />
+        <meta name="google-site-verification" content="HRWXPoUq-hDGzLwQlK8QNFBIAWM9E7OluBbNQPopMjQ" />
       </Head>
       <title>GitLab Confetti 🎉</title>
       <body className="font-geist">
