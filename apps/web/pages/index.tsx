@@ -91,7 +91,7 @@ export default function Home() {
         <div className={styles.ctas}>
           <a
             className={styles.primary}
-            href="https://microsoftedge.microsoft.com/addons/Microsoft-Edge-Extensions-Home"
+            href="https://microsoftedge.microsoft.com/addons/detail/gitlab-confetti/aikpafbhafabmhmhgkgbdgbcojjjkkak"
             target="_blank"
             rel="noopener noreferrer"
           >
