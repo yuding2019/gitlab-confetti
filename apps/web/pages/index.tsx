@@ -6,6 +6,7 @@ import { CheckLine } from '../components/Icon/CheckLine';
 import styles from './page.module.css';
 import { useState } from 'react';
 import { GitMerge } from '../components/Icon/GitMerge';
+import { ChromeIcon } from '../components/Icon/Chrome';
 
 function fireworks() {
   const duration = 5 * 1000;
@@ -98,16 +99,18 @@ export default function Home() {
             <EdgeIcon className={styles.edgeIcon} />
             前往 Edge 扩展商店
           </a>
-          <div className={styles.dropdown}>
-            <div className={styles.dropdownContent}>
-              {/* <a href="./gitlab-confetti.crx" download>
-                下载 CRX
-              </a> */}
-              <a href="./gitlab-confetti.zip" download="gitlab-confetti.zip">
-                下载 ZIP
-              </a>
-            </div>
-          </div>
+          <a
+            className={styles.secondary}
+            href="https://chromewebstore.google.com/detail/gitlab-confetti/mndcjildkhcbefhicemomejgafmakcfo"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <ChromeIcon className={styles.edgeIcon} />
+            前往 Chrome 扩展商店
+          </a>
+          <a href="./gitlab-confetti.zip" download="gitlab-confetti.zip">
+            下载 ZIP
+          </a>
         </div>
       </main>
       <footer className={styles.footer}>
