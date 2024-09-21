@@ -2,7 +2,7 @@
 #
 # To get started with Next.js see: https://nextjs.org/docs/getting-started
 #
-name: Deploy Next.js site to Pages
+name: Deploy static content to Pages
 
 on:
   # Runs on pushes targeting the default branch
@@ -32,32 +32,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set pnpm
-        uses: pnpm/action-setup@v4
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
-        with:
-          # Automatically inject basePath in your Next.js configuration file and disable
-          # server side image optimization (https://nextjs.org/docs/api-reference/next/image#unoptimized).
-          #
-          # You may remove this line if you want to manage the configuration yourself.
-          static_site_generator: next
-          generator_config_file: ./apps/web
 
       - name: Install dependencies
-        run: 'pnpm i'
-      - name: Build with Next.js
-        run: 'pnpm run build:web'
+        run: npm ci
+      - name: Build
+        run: npm run build:web
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./apps/web/out
+          path: ./web/out
 
   # Deployment job
   deploy:
