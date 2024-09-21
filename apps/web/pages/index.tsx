@@ -5,7 +5,7 @@ import { CheckLine } from '../components/Icon/CheckLine';
 
 import styles from './page.module.css';
 import { useState } from 'react';
-import { GitMerge } from '../components/Icon/GitMerge';
+import { GitMerge, MergeRequest } from '../components/Icon/GitMerge';
 import { ChromeIcon } from '../components/Icon/Chrome';
 
 function fireworks() {
@@ -40,6 +40,7 @@ function fireworks() {
 
 export default function Home() {
   const [approved, setApproved] = useState(false);
+  const [thumbsUpCount, setThumbsUpCount] = useState(0);
 
   return (
     <div className={styles.page}>
@@ -71,7 +72,12 @@ export default function Home() {
             {approved && <span>Approved by you!</span>}
           </div>
           <div className={styles.glMrBlock}>
-            <GitMerge className={approved ? styles.merged : styles.merge} />
+            {approved ? (
+              <GitMerge className={`${styles.mr} ${styles.merged}`} />
+            ) : (
+              <MergeRequest className={styles.mr} />
+            )}
+
             {approved ? (
               <>
                 <span>You can merge now!</span>
@@ -85,8 +91,18 @@ export default function Home() {
             <span>Pipeline passed</span>
           </div>
         </div>
-        <button className={styles.thumb} onClick={() => fireworks()}>
-          👍
+        <button
+          className={`${styles.thumb} ${thumbsUpCount ? styles.thumbActive : ''}`}
+          onClick={() => {
+            if (!thumbsUpCount) {
+              setThumbsUpCount(1);
+              fireworks();
+            } else {
+              setThumbsUpCount(0);
+            }
+          }}
+        >
+          👍 {!!thumbsUpCount && <span>{thumbsUpCount}</span>}
         </button>
 
         <div className={styles.ctas}>
