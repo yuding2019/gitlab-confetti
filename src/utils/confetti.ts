@@ -1,15 +1,20 @@
 import confetti from 'canvas-confetti';
 
+/** 随机数 */
+function randomInRange(min: number, max: number) {
+  return Math.random() * (max - min) + min;
+}
+
+/** 烟花效果 */
 export function fireworks() {
+  // 持续时间
   const duration = 5 * 1000;
+  // 结束时间
   const animationEnd = Date.now() + duration;
+
   const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
 
-  function randomInRange(min, max) {
-    return Math.random() * (max - min) + min;
-  }
-
-  const interval = setInterval(function () {
+  const interval = setInterval(() => {
     const timeLeft = animationEnd - Date.now();
 
     if (timeLeft <= 0) {

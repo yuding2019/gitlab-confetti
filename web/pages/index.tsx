@@ -1,42 +1,13 @@
-import confetti from 'canvas-confetti';
+import { useState } from 'react';
 
 import { EdgeIcon } from '../components/Icon/Edge';
 import { CheckLine } from '../components/Icon/CheckLine';
-
-import styles from './page.module.css';
-import { useState } from 'react';
 import { GitMerge, MergeRequest } from '../components/Icon/GitMerge';
 import { ChromeIcon } from '../components/Icon/Chrome';
 
-function fireworks() {
-  const duration = 5 * 1000;
-  const animationEnd = Date.now() + duration;
-  const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+import { fireworks } from '@/src/utils/confetti';
 
-  function randomInRange(min: number, max: number) {
-    return Math.random() * (max - min) + min;
-  }
-
-  const interval = window.setInterval(function () {
-    const timeLeft = animationEnd - Date.now();
-
-    if (timeLeft <= 0) {
-      return clearInterval(interval);
-    }
-
-    const particleCount = 50 * (timeLeft / duration);
-    confetti({
-      ...defaults,
-      particleCount,
-      origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
-    });
-    confetti({
-      ...defaults,
-      particleCount,
-      origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
-    });
-  }, 250);
-}
+import styles from './index.module.css';
 
 export default function Home() {
   const [approved, setApproved] = useState(false);
@@ -47,8 +18,15 @@ export default function Home() {
       <main className={styles.main}>
         <div className={styles.glMerge}>
           <h1>
-            feat(<span className={styles.glLink}>GitLab Confetti</span>): 每一个
-            Commit 都值得被庆祝
+            feat(
+            <a
+              className={styles.glLink}
+              href="https://github.com/yuding2019/gitlab-confetti"
+              target="_blank"
+            >
+              GitLab Confetti
+            </a>
+            ): 每一个 Commit 都值得被庆祝
           </h1>
           <div className={styles.glOverviewWrap}>
             <div className={styles.glOverview}>Overview</div>
@@ -131,7 +109,7 @@ export default function Home() {
       </main>
       <footer className={styles.footer}>
         <a href="https://www.kirilv.com/canvas-confetti/" target="_blank">
-          canvas-confetti : 🎉 performant confetti animation in the browser
+          🎉 canvas-confetti: performant confetti animation in the browser 🎉
         </a>
       </footer>
     </div>

@@ -15,44 +15,12 @@
   font-synthesis: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  .page {
-    --gray-rgb: 255, 255, 255;
-    --gray-alpha-200: rgba(var(--gray-rgb), 0.145);
-    --gray-alpha-100: rgba(var(--gray-rgb), 0.06);
-
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
-  }
-}
-
 .main {
   display: flex;
   flex-direction: column;
   gap: 32px;
   grid-row-start: 2;
-}
-
-.main ol {
   font-family: var(--font-geist-mono);
-  padding-left: 0;
-  margin: 0;
-  font-size: 14px;
-  line-height: 24px;
-  letter-spacing: -0.01em;
-  list-style-position: inside;
-}
-
-.main li:not(:last-of-type) {
-  margin-bottom: 8px;
-}
-
-.main code {
-  font-family: inherit;
-  background: var(--gray-alpha-100);
-  padding: 2px 4px;
-  border-radius: 4px;
-  font-weight: 600;
 }
 
 .ctas {
@@ -174,10 +142,6 @@ button.secondary {
     align-items: center;
   }
 
-  .main ol {
-    text-align: center;
-  }
-
   .ctas {
     flex-direction: column;
   }
@@ -202,12 +166,6 @@ button.secondary {
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  .logo {
-    filter: invert();
-  }
-}
-
 .icon {
   width: 24px;
   height: 24px;
@@ -222,6 +180,11 @@ button.secondary {
 
 .glLink {
   color: #1068bf;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .glOverviewWrap {
@@ -283,15 +246,6 @@ button.secondary {
       rgba(0, 0, 0, 0.06) 63%
     );
     background-size: 400% 100%;
-  }
-}
-
-@keyframes shine {
-  0% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0 50%;
   }
 }
 

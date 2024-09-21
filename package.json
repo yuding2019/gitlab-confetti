@@ -3,21 +3,37 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "dev:ext": "turbo dev --filter ./apps/extension",
-    "dev:web": "turbo dev --filter ./apps/web",
-    "build:ext": "turbo build --filter ./apps/extension --force",
-    "build:web": "turbo build --filter ./apps/web --force"
+    "dev:ext": "rollup -c build-ext.config.js -w",
+    "dev:web": "vite -c vite.config.ts --host",
+    "build:ext": "rollup -c build-ext.config.js",
+    "build:web": "vite build -c vite.config.ts",
+    "preview": "vite preview -c vite.config.ts"
   },
+  "type": "module",
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@types/canvas-confetti": "^1.6.4",
+    "@types/chrome": "^0.0.271",
+    "@types/node": "^20.16.5",
+    "@types/react": "^18.3.8",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.6",
     "prettier": "^3.2.5",
+    "rollup-plugin-copy": "^3.5.0",
+    "tslib": "^2.7.0",
     "turbo": "^2.1.0",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "vite": "^5.4.7"
   },
-  "packageManager": "pnpm@8.15.6",
   "engines": {
     "node": ">=18"
+  },
+  "dependencies": {
+    "canvas-confetti": "^1.9.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   }
 }

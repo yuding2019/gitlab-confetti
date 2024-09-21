@@ -1,4 +1,4 @@
-import { fireworks } from './confetti';
+import { fireworks } from '../utils/confetti';
 
 const CACHE_KEY = 'gitlab-confetti';
 
